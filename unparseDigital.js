@@ -29,8 +29,13 @@ function unparseDigital(duration) {
     let unparsedDuration = 0
 
     for (let i = 0; i < parts.length; i++) {
+        const parsedAmount = parseInt(parts[i])
+        if (isNaN(parsedAmount)) {
+            throw new Error(`Invalid time "${parts[i]}" provided.`)
+        }
+
         unparsedDuration = 
-            unparsedDuration + convertionConstants[i](parseInt(parts[i]))
+            unparsedDuration + convertionConstants[i](parsedAmount)
     }
 
     return unparsedDuration
