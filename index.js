@@ -46,6 +46,7 @@ const music = new ForgeMusic({
 const client = new ForgeClient({
     events: [
         'interactionCreate',
+        'messageCreate',
         'ready'
     ],
     extensions: [
@@ -56,10 +57,15 @@ const client = new ForgeClient({
     ],
     intents: [
         'Guilds',
+        'GuildMessages',
         'GuildVoiceStates'
     ],
     logLevel: LogPriority.Medium,
-    token: process.env.TOKEN
+    prefixes: [
+        '<@$clientID>',
+        '<@!$clientID>'
+    ],
+    token: process.env.TOKEN,
 })
 
 // Adding the custom functions.
@@ -68,6 +74,7 @@ FunctionManager.load('sora', process.cwd() + '/functions')
 
 // Loading music and events.
 client.applicationCommands.load('./commands')
+client.commands.load('./internalCommands')
 client.commands.load('./events/client')
 music.commands.load('./events/music')
 

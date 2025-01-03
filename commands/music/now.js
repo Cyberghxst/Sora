@@ -68,9 +68,38 @@ module.exports = {
 
             $c[Add incoming tracks if there are queued tracks.]
             $if[$queueLength>0;
+                $c[Load the queued track to an array.]
                 $arrayLoad[tracks;_ඞ_ඞ_;$queue[0;5;{position}. **{track.cleanTitle}** by **{track.author}**;_ඞ_ඞ_]]
+                $let[maximumCanvasWidth;$multi[70;$arrayLength[tracks]]]
+
+                $c[Canvas stuff.]
+                $createCanvas[queue;$setCanvasSize[512;$get[maximumCanvasWidth]]]
+                $let[barHeight;$sub[$canvasSize[queue;width];50]]
+                $let[verticalPosition;20]
+                $let[horizontalPosition;$divide[$sub[$canvasSize[queue;width];$get[barHeight]];2]]
+                $let[backgroundURL;https://4kwallpapers.com/images/wallpapers/3d-background-squares-purple-light-metal-aesthetic-2048x2048-2700.jpg]
+                $filter[queue;add;blur;10]
+                $drawImage[queue;$get[backgroundURL];0;0;$canvasSize[queue;width];$canvasSize[queue;height]]
+                $filter[queue;remove;blur;10]
+                $arrayForEach[tracks;track;
+                    $let[text;$replace[$env[track];**;]]
+                    $let[safeText;$if[$charCount[$get[text]]>=42;$textSlice[$get[text];0;40]...;$get[text]]]
+
+                    $drawRect[queue;fill;#FFFFFF;$get[horizontalPosition];$get[verticalPosition];$get[barHeight];30]
+                    $drawText[queue;fill;$get[safeText];20px Arial;#000000;$sum[$get[horizontalPosition];10];$sum[$get[verticalPosition];22]]
+
+                    $letSum[verticalPosition;50]
+                ]
+
+                $c[Draw the client name into the image.]
+                $drawText[queue;fill;$username[$clientID] Music;10px Arial;#FFFFFF;$get[horizontalPosition];$sub[$get[maximumCanvasWidth];10]]
+
+                $c[Attach the canvas as attachment.]
+                $attachCanvas[queue]
+
                 $title[Incoming Tracks;;1]
-                $description[$arrayJoin[tracks;\n];1]
+                $description[Amount of pending songs: $queueLength\nEstimated time: $queueEstimatedTime\n-# Estimated time is an approximation, cannot be accurate.;1]
+                $image[attachment://queue.png;1]
                 $footer[$username[$clientID] Music;$userAvatar[$clientID];1]
                 $color[FFFFFF;1]
                 $timestamp[;1]
