@@ -24,11 +24,14 @@ exports.default = new NativeFunction({
         const player = ctx.getExtension(ForgeMusic, true).player
         const result = await player.play(voiceChannel, WATERMARK_PATH, {
             nodeOptions: {
+                metadata: {
+                    text: ctx.channel
+                },
                 leaveOnEnd: false,
                 leaveOnStop: false,
                 leaveOnEmpty: false
             },
-            searchEngine: 'file'
+            searchEngine: QueryType.FILE
         }).catch(e => e)
 
         return result instanceof Error
