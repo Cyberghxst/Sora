@@ -68,14 +68,15 @@ const client = new ForgeClient({
     token: process.env.TOKEN,
 })
 
-// Adding the custom functions.
-// client.functions.add(...functions)
+// Adding custom functions.
 FunctionManager.load('sora', process.cwd() + '/functions')
+client.functions.add(...functions)
 
 // Loading music and events.
 client.applicationCommands.load('./commands')
 client.commands.load('./internalCommands')
 client.commands.load('./events/client')
+client.commands.load('./interactions')
 music.commands.load('./events/music')
 
 // Adding more sources to music service.

@@ -1,17 +1,16 @@
 module.exports = [
     {
-        name: 'fixedUnparseDigital',
+        name: 'toPascalCase',
         params: [
-            'digitalDuration'
+            'text'
         ],
         code: `
-            $djsEval[
-                eval('$readFile[./unparseDigital.js;utf-8]');
-                const unparsed = unparseDigital('$env[digitalDuration]');
-                ctx.setEnvironmentKey('unparsed', unparsed);
-            ]
-            
-            $return[$get[unparsed]]
+            $arrayLoad[parts; ;$env[text]]
+            $arrayMap[parts;part;
+                $return[$toUpperCase[$textSlice[$env[part];0;1]]$textSlice[$env[part];1]]
+            ;result]
+
+            $return[$arrayJoin[result;]]
         `
     }
 ]

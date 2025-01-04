@@ -98,7 +98,7 @@ module.exports = {
                 $attachCanvas[queue]
 
                 $title[Incoming Tracks;;1]
-                $description[Amount of pending songs: $queueLength\nEstimated time: $queueEstimatedTime\n-# Estimated time is an approximation, cannot be accurate.;1]
+                $description[Amount of pending songs: $queueLength\nEstimated time: $parseMS[$queueEstimatedDuration]\n-# Estimated time is an approximation, cannot be accurate.;1]
                 $image[attachment://queue.png;1]
                 $footer[$username[$clientID] Music;$userAvatar[$clientID];1]
                 $color[FFFFFF;1]
