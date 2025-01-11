@@ -2,7 +2,7 @@ const { NativeFunction, ArgType } = require('@tryforge/forgescript')
 const { ForgeMusic, QueryType } = require('@tryforge/forge.music')
 const { join } = require('path')
 
-const WATERMARK_PATH = join(process.cwd(), '/sounds', 'SORA_WATERMARK.wav')
+const WATERMARK_PATH = join(process.cwd(), 'sounds', 'SORA_WATERMARK.wav')
 
 exports.default = new NativeFunction({
     name: '$playWatermark',
@@ -24,6 +24,7 @@ exports.default = new NativeFunction({
         const player = ctx.getExtension(ForgeMusic, true).player
         const result = await player.play(voiceChannel, WATERMARK_PATH, {
             nodeOptions: {
+                disableHistory: false,
                 metadata: {
                     text: ctx.channel
                 },

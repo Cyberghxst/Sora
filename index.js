@@ -29,7 +29,7 @@ readFile('./constants.json', 'utf-8', (err, text) => {
 const music = new ForgeMusic({
     connectOptions: {
         leaveOnEmpty: false,
-        leaveOnEmptyCooldown: 60 * 1000
+        disableHistory: false
     },
     events: [
         GuildQueueEvent.ConnectionDestroyed,

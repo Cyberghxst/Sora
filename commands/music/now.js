@@ -69,7 +69,7 @@ module.exports = {
             $c[Add incoming tracks if there are queued tracks.]
             $if[$queueLength>0;
                 $c[Load the queued track to an array.]
-                $arrayLoad[tracks;_ඞ_ඞ_;$queue[0;5;{position}. **{track.cleanTitle}** by **{track.author}**;_ඞ_ඞ_]]
+                $arrayLoad[tracks;ඞ;$queue[0;5;{position}. **{track.cleanTitle}** by **{track.author}**;ඞ]]
                 $let[maximumCanvasWidth;$multi[70;$arrayLength[tracks]]]
 
                 $c[Canvas stuff.]
