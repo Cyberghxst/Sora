@@ -11,13 +11,13 @@
   "license": "Apache-2.0",
   "packageManager": "pnpm@9.15.2",
   "dependencies": {
-    "@tryforge/forge.canvas": "^1.1.1",
-    "@tryforge/forge.db": "^2.0.8",
-    "@tryforge/forge.music": "github:Cyberghxst/forgemusic",
+    "@tryforge/forge.canvas": "^1.2.0",
+    "@tryforge/forge.db": "^2.0.9",
+    "@tryforge/forge.music": "github:tryforge/ForgeMusic#dev",
     "@tryforge/forgescript": "github:tryforge/ForgeScript#dev",
     "discord-player-deezer": "^2.1.0",
-    "discord-player-youtubei": "^1.3.7",
-    "discord-voip": "^7.0.0",
+    "discord-player-youtubei": "^1.4.1",
+    "discord-voip": "^7.1.0",
     "forge.regex": "github:xNickyDev/ForgeRegex",
     "sqlite3": "^5.1.7"
   }
