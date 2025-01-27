@@ -86,7 +86,7 @@ module.exports = {
             $let[hadMusicNode;$hasMusicNode]
 
             $c[If there was no music node before, let's play the watermark.]
-            $if[$get[hadMusicNode]==false;$playWatermark[$voiceID[$guildID;$authorID]]]
+            $if[$get[hadMusicNode]==false;$callFunction[playWatermark;$voiceID[$guildID;$authorID]]]
 
             $playTrack[$voiceID[$guildID;$authorID];$get[query]]
             $interactionFollowUp[

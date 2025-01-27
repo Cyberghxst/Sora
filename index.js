@@ -28,6 +28,8 @@ readFile('./constants.json', 'utf-8', (err, text) => {
 
 const music = new ForgeMusic({
     connectOptions: {
+        leaveOnEnd: false,
+        leaveOnStop: false,
         leaveOnEmpty: false,
         disableHistory: false
     },

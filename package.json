@@ -13,7 +13,7 @@
   "dependencies": {
     "@tryforge/forge.canvas": "^1.2.0",
     "@tryforge/forge.db": "^2.0.9",
-    "@tryforge/forge.music": "github:tryforge/ForgeMusic#dev",
+    "@tryforge/forge.music": "^1.0.0",
     "@tryforge/forgescript": "github:tryforge/ForgeScript#dev",
     "discord-player-deezer": "^2.1.0",
     "discord-player-youtubei": "^1.4.1",

@@ -1,3 +1,6 @@
+const { join } = require('path')
+const WATERMARK_PATH = join(process.cwd(), 'sounds', 'SORA_WATERMARK.wav').replace(/\\/g, '/')
+
 module.exports = [
     {
         name: 'toPascalCase',
@@ -11,6 +14,15 @@ module.exports = [
             ;result]
 
             $return[$arrayJoin[result;]]
+        `
+    },
+    {
+        name: 'playWatermark',
+        params: [
+            'voiceId'
+        ],
+        code: `
+            $playTrack[$env[voiceId];${WATERMARK_PATH};file]
         `
     }
 ]
