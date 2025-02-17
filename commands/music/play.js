@@ -52,7 +52,7 @@ module.exports = {
         $createRegex[vimeo;$getGlobalVar[vimeoRegex]]
 
         $c[Trying to guess the user input source.]
-        $let[sourceType;userTitle]
+        $let[sourceType;youtube]
         $ifx[
             $if[$regexTest[soundcloud;$get[query]]==true;
                 $c[If the user link has query parameters, we need to remove them.]
@@ -88,7 +88,7 @@ module.exports = {
             $c[If there was no music node before, let's play the watermark.]
             $if[$get[hadMusicNode]==false;$callFunction[playWatermark;$voiceID[$guildID;$authorID]]]
 
-            $playTrack[$voiceID[$guildID;$authorID];$get[query]]
+            $playTrack[$voiceID[$guildID;$authorID];$get[query];$get[sourceType];YOUTUBE]
             $interactionFollowUp[
                 $title[Occurences found]
                 $description[<:disk:1323748440425103411> → $if[$get[hadMusicNode]==true;Track added to the queue.;Playing the track...]$if[$get[sourceType]==youtube;\n${redPlatformWarning}]]
