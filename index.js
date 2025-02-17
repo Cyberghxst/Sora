@@ -1,12 +1,6 @@
-const { DefaultExtractors, ForgeMusic, GuildQueueEvent } = require('@tryforge/forge.music')
-const { ForgeClient, FunctionManager, LogPriority } = require('@tryforge/forgescript')
-const { YoutubeiExtractor } = require('discord-player-youtubei')
-const { DeezerExtractor } = require('discord-player-deezer')
-const { ForgeCanvas } = require('@tryforge/forge.canvas')
-const { ForgeDB } = require('@tryforge/forge.db')
-const functions = require('./handlers/functions')
-const { ForgeRegex } = require('forge.regex')
-const { readFile } = require('fs')
+const { Partials } = require('discord.js')
+const { DiscordClient } = require('./classes/structures/DiscordClient')
+const { GatewayIntentBits, REST, Routes } = require('discord.js')
 
 // Error catchers.
 process.on('unhandledRejection', (reason, p) => {
@@ -20,69 +14,42 @@ process.on('unhandledRejection', (reason, p) => {
 // Load the ".env" file.
 process.loadEnvFile()
 
-// Load the constants file into ForgeDB.
-readFile('./constants.json', 'utf-8', (err, text) => {
-    const parsed = JSON.parse(text)
-    ForgeDB.variables(parsed)
+// The bot itself.
+const client = new DiscordClient({
+    intents: GatewayIntentBits.Guilds
+        | GatewayIntentBits.GuildMessages
+        | GatewayIntentBits.GuildVoiceStates,
+    partials: [
+        Partials.Channel,
+        Partials.GuildMember,
+        Partials.User
+    ]
 })
 
-const music = new ForgeMusic({
-    connectOptions: {
-        leaveOnEnd: false,
-        leaveOnStop: false,
-        leaveOnEmpty: false,
-        disableHistory: false
-    },
-    events: [
-        GuildQueueEvent.ConnectionDestroyed,
-        GuildQueueEvent.PlayerStart,
-        GuildQueueEvent.PlayerError,
-        GuildQueueEvent.Connection,
-        GuildQueueEvent.Disconnect,
-        GuildQueueEvent.EmptyQueue,
-        GuildQueueEvent.Error
-    ],
-    includeExtractors: DefaultExtractors
+client.commands.load(__dirname + '/commands')
+client.once('ready', async () => {
+    const rest = new REST().setToken(process.env.TOKEN)
+    await rest.put(
+        Routes.applicationGuildCommands(client.user.id, '966131185120059424'),
+        { body: client.commands.all().map(c => c.toJSON) }
+    )
 })
 
-const client = new ForgeClient({
-    events: [
-        'interactionCreate',
-        'messageCreate',
-        'ready'
-    ],
-    extensions: [
-        music,
-        new ForgeDB(),
-        new ForgeRegex(),
-        new ForgeCanvas()
-    ],
-    intents: [
-        'Guilds',
-        'GuildMessages',
-        'GuildVoiceStates'
-    ],
-    logLevel: LogPriority.Medium,
-    prefixes: [
-        '<@$clientID>',
-        '<@!$clientID>'
-    ],
-    token: process.env.TOKEN,
+client.on('interactionCreate', async interaction => {
+    if (interaction.isChatInputCommand()) {
+        const command = client.commands.all().find(c => c.data.name === interaction.commandName)
+        if (!command) return;
+
+        if (command.validators.length) {
+            for (const callback of command.validators) {
+                if (!(callback({ interaction, client }))) {
+                    return;
+                }
+            }
+        }
+
+        await command.execute({ interaction, client })
+    }
 })
 
-// Adding custom functions.
-FunctionManager.load('sora', process.cwd() + '/functions')
-client.functions.add(...functions)
-
-// Loading music and events.
-client.applicationCommands.load('./commands')
-client.commands.load('./internalCommands')
-client.commands.load('./events/client')
-client.commands.load('./interactions')
-music.commands.load('./events/music')
-
-// Adding more sources to music service.
-// music.player.extractors.register(YoutubeiExtractor, {})
-// music.player.extractors.register(DeezerExtractor, { decryptionKey: process.env.DZR_DECRYPTION_KEY })
-
-client.login()
+client.login(process.env.TOKEN)

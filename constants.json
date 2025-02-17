@@ -1,8 +1,0 @@
-{
-    "soundcloudRegex": "((https|http):\\/\\/)?(soundcloud|on|snd|m)\\.?(soundcloud|com|app|sc)(\\.com|\\.goo\\.gl)?\\/[a-zA-Z0-9]+(\\/[a-zA-Z0-9-]+)?",
-    "spotifyRegex": "(https?:\\/\\/open.spotify.com(\\/intl-es)?\\/(track|user|artist|album)\\/[a-zA-Z0-9]+(\\/playlist\\/[a-zA-Z0-9]+|)|spotify:(track|user|artist|album):[a-zA-Z0-9]+(:playlist:[a-zA-Z0-9]+|))",
-    "youtubeRegex": "^((?:https?:)?\\/\\/)?((?:www|m)\\.)?((?:youtube\\.com|youtu\\.be))(\\/(?:[\\w\\-]+\\?v=|embed\\/|v\\/)?)([\\w\\-]+)(\\S+)?$",
-    "deezerRegex": "^https?:\\/\\/(?:www\\.)?deezer\\.com\\/(track|album|playlist)\\/(\\d+)$",
-    "vimeoRegex": "^https?:\/\/(?:www\\.)?vimeo\\.com.+?(\\d+).*$",
-    "ownerId": "590267498192961540"
-}
