@@ -1,0 +1,39 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "commonjs",
+        "rootDir": "src",
+        "outDir": "dist",
+        "strict": true,
+        "declaration": true,
+        "composite": true,
+        "incremental": true,
+        "tsBuildInfoFile": "__cache__/.tsbuildinfo",
+        // "moduleResolution": "node",
+        "importHelpers": true,
+        "experimentalDecorators": false,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "allowSyntheticDefaultImports": true,
+        "resolveJsonModule": true,
+        "forceConsistentCasingInFileNames": true,
+        "removeComments": false,
+        "sourceMap": false,
+        "baseUrl": "./",
+        "paths": {
+            "@managers/*": ["src/managers/*"],
+            "@structures/*": ["src/structures/*"],
+            "@utils/*": ["src/utils/*"],
+        },
+        "noImplicitReturns": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "__cache__",
+        "__test__",
+        "node_modules",
+        "dist"
+    ]
+}
