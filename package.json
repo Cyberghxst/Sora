@@ -1,0 +1,24 @@
+{
+  "name": "sora",
+  "version": "1.0.0",
+  "description": "A Discord music bot built with ForgeScript and ForgeMusic.",
+  "main": "./index.js",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "keywords": [],
+  "author": "Cyberghxst",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@9.15.2",
+  "dependencies": {
+    "@tryforge/forge.canvas": "^1.2.0",
+    "@tryforge/forge.db": "^2.0.9",
+    "@tryforge/forge.music": "^1.0.0",
+    "@tryforge/forgescript": "github:tryforge/ForgeScript#dev",
+    "discord-player-deezer": "^2.1.0",
+    "discord-player-youtubei": "^1.4.1",
+    "discord-voip": "^7.1.0",
+    "forge.regex": "github:xNickyDev/ForgeRegex",
+    "sqlite3": "^5.1.7"
+  }
+}
