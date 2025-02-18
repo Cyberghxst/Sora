@@ -5,7 +5,7 @@ export interface SoraChatInputCommandData extends Omit<ChatInputApplicationComma
     /**
      * The name of the command.
      */
-    name: string | string[]
+    name: string
     /**
      * Executes the given callbacks before executing the command.
      */
@@ -16,5 +16,5 @@ export interface SoraChatInputCommandData extends Omit<ChatInputApplicationComma
      * @param interaction - The current command interaction context.
      * @returns {Promise<any>}
      */
-    execute: (this: Sora, interaction: ChatInputCommandInteraction) => Promise<any>
+    execute: (this: Sora, interaction: ChatInputCommandInteraction<'cached'>) => Promise<any>
 }
