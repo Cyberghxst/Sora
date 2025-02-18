@@ -22,7 +22,10 @@ export default new DiscordEventHandler({
                 }
 
                 // Execute the command.
-                await command.execute.call(this, interaction as ChatInputCommandInteraction<'cached'>)
+                const result = await command.execute.call(this, interaction as ChatInputCommandInteraction<'cached'>)
+                if (result.isError()) {
+                    await interaction.reply({ content: result.value instanceof Error ? result.value.message : result.value ?? 'Something went wrong.' })
+                }
             }
         }
     }

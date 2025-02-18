@@ -1,4 +1,4 @@
-import type { SoraChatInputCommandData } from '@structures/SoraCommand'
+import { Output, type SoraChatInputCommandData } from '@structures/SoraCommand'
 import { ApplicationCommandOptionType } from 'discord.js'
 
 export const data: SoraChatInputCommandData = {
@@ -14,7 +14,7 @@ export const data: SoraChatInputCommandData = {
     ],
     async execute(interaction) {
         if (!interaction.member.voice) {
-            return await interaction.reply('You must be connected to a voice channel.')
+            return Output.error('You must be connected to a voice channel!')
         }
 
         const query = interaction.options.getString('query', true)
@@ -24,11 +24,11 @@ export const data: SoraChatInputCommandData = {
 
             await interaction.reply(`Playing ${track.cleanTitle} by **${track.author}**.`)
         } catch (e: any) {
-            await interaction.reply(`Unable to play the track with reason:\n-# ${e.message}`)
+            return Output.error(`Unable to play the track with reason:\n-# ${e.message}`)
         }
 
 
-        return;
+        return Output.success();
     },
     validate: [
         function (interaction) {

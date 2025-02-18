@@ -1,4 +1,4 @@
-import type { AutocompleteInteraction, ChatInputApplicationCommandData, ChatInputCommandInteraction } from 'discord.js'
+import type { ChatInputApplicationCommandData, ChatInputCommandInteraction } from 'discord.js'
 import type { Sora } from './Sora'
 
 export interface SoraChatInputCommandData extends Omit<ChatInputApplicationCommandData, 'name'> {
@@ -16,5 +16,29 @@ export interface SoraChatInputCommandData extends Omit<ChatInputApplicationComma
      * @param interaction - The current command interaction context.
      * @returns {Promise<any>}
      */
-    execute: (this: Sora, interaction: ChatInputCommandInteraction<'cached'>) => Promise<any>
+    execute: (this: Sora, interaction: ChatInputCommandInteraction<'cached'>) => Output | Promise<Output>
+}
+
+/**
+ * The possible command output types.
+ */
+export enum OutputType {
+    Error,
+    Success
+}
+
+export class Output<Type extends OutputType = OutputType, Value = unknown> {
+    static error(value?: string | Error) {
+        return new Output(OutputType.Error, value)
+    }
+    static success(value?: unknown) {
+        return new Output(OutputType.Success, value)
+    }
+    constructor(public type: Type, public value?: Value) {}
+    isSuccess(): this is Output<OutputType.Success, string> {
+        return this.type === OutputType.Success
+    }
+    isError(): this is Output<OutputType.Error, string | Error> {
+        return this.type === OutputType.Error
+    }
 }
