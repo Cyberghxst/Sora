@@ -9,7 +9,7 @@ const defaultClientEventsPath = join(__dirname, '..', 'events/discord')
 /**
  * The music player events path.
  */
-const defaultPlayerEventsPath = join(__dirname, '..', 'events/discord')
+const defaultPlayerEventsPath = join(__dirname, '..', 'events/player')
 /**
  * The events registry.
  */
