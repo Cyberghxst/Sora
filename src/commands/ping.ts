@@ -6,4 +6,7 @@ export const data: SoraChatInputCommandData = {
     async execute(interaction) {
         await interaction.reply('ok')
     },
+    validate: [
+        (interaction) => interaction.user.id === '590267498192961540'
+    ]
 }

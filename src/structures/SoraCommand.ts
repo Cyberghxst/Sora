@@ -7,6 +7,10 @@ export interface SoraChatInputCommandData extends Omit<ChatInputApplicationComma
      */
     name: string | string[]
     /**
+     * Executes the given callbacks before executing the command.
+     */
+    validate?: Array<(this: Sora, ...args: Parameters<SoraChatInputCommandData['execute']>) => boolean>
+    /**
      * The executor of this command.
      * @param this - The sora client instance.
      * @param interaction - The current command interaction context.
