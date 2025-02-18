@@ -44,7 +44,7 @@ export class EventManager {
      * @param name - The name of the events branch.
      * @param dir - The dir to load the events from.
      */
-    static load(name: string, dir = defaultClientEventsPath) {
+    static load(name = 'sora', dir = defaultClientEventsPath) {
         const paths = recursiveCollectFilePaths(dir, f => f.endsWith('.js'))
         const events: BaseEventHandler[] = paths.map(path => require(path).default)
 
