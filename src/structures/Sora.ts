@@ -1,11 +1,19 @@
-import { Player, type PlayerInitOptions } from 'discord-player'
+import { GuildQueueEvents, Player, type PlayerInitOptions } from 'discord-player'
 import { DefaultExtractors } from '@discord-player/extractor'
-import { Client, type ClientOptions } from 'discord.js'
+import { Client, ClientEvents, type ClientOptions } from 'discord.js'
 
 /**
  * The addition options of Sora.
  */
-export interface CustomSoraOptions extends PlayerInitOptions {}
+export interface CustomSoraOptions extends PlayerInitOptions {
+    /**
+     * The events to be loaded.
+     */
+    events: {
+        client: Array<keyof ClientEvents>
+        player: Array<keyof GuildQueueEvents>
+    }
+}
 
 /**
  * A mix of the base client options and Sora ones.
