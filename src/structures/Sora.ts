@@ -1,6 +1,8 @@
-import { GuildQueueEvents, Player, type PlayerInitOptions } from 'discord-player'
+import { type GuildQueueEvents, Player, type PlayerInitOptions } from 'discord-player'
+import { Client, type ClientEvents, type ClientOptions } from 'discord.js'
 import { DefaultExtractors } from '@discord-player/extractor'
-import { Client, ClientEvents, type ClientOptions } from 'discord.js'
+import { defaultPlayerEventsPath, EventManager } from '@managers/EventManager'
+import { DiscordEventHandler, PlayerEventHandler } from './SoraEventHandler'
 
 /**
  * The addition options of Sora.
@@ -28,6 +30,10 @@ export class Sora extends Client<true> {
      * The main discord music player.
      */
     public player: Player
+    /**
+     * The list of allowed events.
+     */
+    private allowedEvents: SoraInitOptions['events']
 
     /**
      * The setup options for Sora.
@@ -35,7 +41,38 @@ export class Sora extends Client<true> {
      */
     constructor(options: SoraInitOptions) {
         super(options)
+        this.allowedEvents = options.events
         this.player = new Player(this, options)
+
+        EventManager.load() // Load the client events.
+        EventManager.load('player', defaultPlayerEventsPath) // Load the player events.
+
+        this.#attachSoraEvents()
+        this.#attachPlayerEvents()
+    }
+
+    /**
+     * Attach the discord client events.
+     */
+    #attachSoraEvents() {
+        const events = EventManager.toArray<DiscordEventHandler>()
+        for (const event of events) {
+            if (this.allowedEvents.client.includes(event.name)) {
+                event.attach(this)
+            }
+        }
+    }
+
+    /**
+     * Attach the events of the music player.
+     */
+    #attachPlayerEvents() {
+        const events = EventManager.toArray<PlayerEventHandler>('player')
+        for (const event of events) {
+            if (this.allowedEvents.player.includes(event.name)) {
+                event.attach(this)
+            }
+        }
     }
 
     /**

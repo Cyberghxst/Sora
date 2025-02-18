@@ -5,11 +5,11 @@ import { join } from 'path'
 /**
  * The client events path.
  */
-const defaultClientEventsPath = join(__dirname, '..', 'events/discord')
+export const defaultClientEventsPath = join(__dirname, '..', 'events/discord')
 /**
  * The music player events path.
  */
-const defaultPlayerEventsPath = join(__dirname, '..', 'events/player')
+export const defaultPlayerEventsPath = join(__dirname, '..', 'events/player')
 /**
  * The events registry.
  */
@@ -61,7 +61,7 @@ export class EventManager {
      * @param branch - The branch to get.
      * @returns {BaseEventHandler[]}
      */
-    static toArray(branch = 'sora') {
-        return Object.values(registry[branch])
+    static toArray<T extends BaseEventHandler = BaseEventHandler>(branch = 'sora') {
+        return Object.values(registry[branch]) as T[]
     }
 }

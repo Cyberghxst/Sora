@@ -25,8 +25,9 @@ export interface EventHandlerData<Events = Record<string, unknown[]>, K extends 
 /**
  * The base event handler class.
  */
-export class BaseEventHandler<Events = Record<string, unknown>, Names extends keyof Events = keyof Events> {
+export abstract class BaseEventHandler<Events = Record<string, unknown>, Names extends keyof Events = keyof Events> {
     constructor(private data: EventHandlerData<Events, Names>) {}
+    abstract attach(client: Sora): void
     public get name() {
         return this.data.name
     }
@@ -41,9 +42,21 @@ export class BaseEventHandler<Events = Record<string, unknown>, Names extends ke
 /**
  * The discord event handler.
  */
-export class DiscordEventHandler<K extends keyof ClientEvents> extends BaseEventHandler<ClientEvents, K> {}
+export class DiscordEventHandler<K extends keyof ClientEvents = keyof ClientEvents> extends BaseEventHandler<ClientEvents, K> {
+    attach(client: Sora) {
+        client[this.once ? 'once' : 'on'](this.name, this.execute.bind(client) as any)
+    }
+}
+
+export type CorrectedGuildQueueEvents = {
+    [K in keyof GuildQueueEvents]: Parameters<GuildQueueEvents[K]>
+}
 
 /**
  * The music player event handler.
  */
-export class PlayerEventHandler<K extends keyof GuildQueueEvents> extends BaseEventHandler<GuildQueueEvents, K> {}
+export class PlayerEventHandler<K extends keyof GuildQueueEvents = keyof GuildQueueEvents> extends BaseEventHandler<CorrectedGuildQueueEvents, K> {
+    attach(client: Sora) {
+        client.player.events[this.once ? 'once' : 'on'](this.name, this.execute.bind(client) as any)
+    }
+}
