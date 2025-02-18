@@ -116,7 +116,7 @@ module.exports = {
         $if[$get[succeed]==true;
             $interactionFollowUp[
                 $title[Occurences found]
-                $description[<:disk:1323748440425103411> → $if[$get[hadMusicNode]==true;Track added to the queue.;Playing the track...]$if[$get[sourceType]==youtube;\n${redPlatformWarning}]$if[$get[currentConnectionRetry]>0;\nConnected after $bold[$get[currentConnectionRetry] retries].]]
+                $description[<:disk:1323748440425103411> → $if[$get[hadMusicNode]==true;Track added to the queue.;Playing the track...]$if[$get[sourceType]==youtube;\n${redPlatformWarning}]$if[$get[currentConnectionRetry]>0;\nConnected after $bold[$get[currentConnectionRetry] retr$if[$get[currentConnectionRetry]==1;y;ies]].]]
                 $footer[$username[$clientID] Music]
                 $color[FFFFFF]
                 $timestamp
@@ -127,7 +127,7 @@ module.exports = {
         $if[$and[$get[currentConnectionRetry]==$get[maximumConnectionRetries];$get[succeed]==false];
             $interactionFollowUp[
                 $title[Something internal went wrong]
-                $description[I was unable to play the given song after $bold[$get[currentConnectionRetry] connection retries].\n-# with reason: $advancedTextSplit[$replace[$get[lastErrorReason];[Object\\] ;];(Extractor;0]]
+                $description[I was unable to play the given song after $bold[$get[currentConnectionRetry] connection retr$if[$get[currentConnectionRetry]==1;y;ies]].\n-# with reason: $advancedTextSplit[$replace[$get[lastErrorReason];[Object\\] ;];(Extractor;0]]
                 $footer[$username[$clientID] Music]
                 $color[FFFFFF]
                 $timestamp
