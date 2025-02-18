@@ -80,15 +80,37 @@ module.exports = {
         $c[Deferring the interaction as the song search may take long.]
         $defer
 
-        $c[Trying to play the song.]
+        $c[Checking whether current guild has a music node created.]
+        $let[hadMusicNode;$hasMusicNode]
+
+        $c[If there was no music node before, let's play the watermark.]
+        $if[$get[hadMusicNode]==false;$callFunction[playWatermark;$voiceID[$guildID;$authorID]]]
+
+        $c[Retry system to play a track.]
+        $let[maximumConnectionRetries;10]
+        $let[currentConnectionRetry;0]
+        $let[lastErrorReason;No reason.]
+        $let[succeed;false]
+
+        $c[Trying to play once.]
         $try[
-            $c[Checking whether current guild has a music node created.]
-            $let[hadMusicNode;$hasMusicNode]
-
-            $c[If there was no music node before, let's play the watermark.]
-            $if[$get[hadMusicNode]==false;$callFunction[playWatermark;$voiceID[$guildID;$authorID]]]
-
             $playTrack[$voiceID[$guildID;$authorID];$get[query];$get[sourceType];YOUTUBE]
+            $let[succeed;true]
+        ;$let[lastErrorReason;$env[e;message]];e]
+
+        $c[Trying to play many times.]
+        $while[$and[$get[currentConnectionRetry]<$get[maximumConnectionRetries];$get[succeed]==false];
+            $try[
+                $playTrack[$voiceID[$guildID;$authorID];$get[query];$get[sourceType];YOUTUBE]
+                $let[succeed;true]
+            ;
+                $let[lastErrorReason;$env[error;message]]
+                $let[currentConnectionRetry;$sum[$get[currentConnectionRetry];1]]
+            ;error]
+        ]
+
+        $c[Send the play message if succeed.]
+        $if[$get[succeed]==true;
             $interactionFollowUp[
                 $title[Occurences found]
                 $description[<:disk:1323748440425103411> → $if[$get[hadMusicNode]==true;Track added to the queue.;Playing the track...]$if[$get[sourceType]==youtube;\n${redPlatformWarning}]]
@@ -96,15 +118,19 @@ module.exports = {
                 $color[FFFFFF]
                 $timestamp
             ]
-        ;
-            $c[Send the error message if something goes wrong.]
+        ]
+
+        $logger[Info;SUCCEED?: $get[succeed]]
+
+        $c[Send the error message if maximum retries reached and not success.]
+        $if[$and[$get[currentConnectionRetry]==$get[maximumConnectionRetries];$get[succeed]==false];
             $interactionFollowUp[
                 $title[Something internal went wrong]
-                $description[I was unable to play the given song.\n-# with reason: $advancedTextSplit[$replace[$env[error];[Object\\] ;];(Extractor;0]]
+                $description[I was unable to play the given song after $bold[$get[currentConnectionRetry] connection retries].\n-# with reason: $advancedTextSplit[$replace[$get[lastErrorReason];[Object\\] ;];(Extractor;0]]
                 $footer[$username[$clientID] Music]
                 $color[FFFFFF]
                 $timestamp
             ;false]
-        ;error]
+        ]
     `
 }
