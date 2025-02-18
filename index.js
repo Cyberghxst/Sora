@@ -42,7 +42,7 @@ const music = new ForgeMusic({
         GuildQueueEvent.EmptyQueue,
         GuildQueueEvent.Error
     ],
-    includeExtractors: DefaultExtractors
+    includeExtractors: [...DefaultExtractors, YoutubeiExtractor]
 })
 
 const client = new ForgeClient({
@@ -80,9 +80,5 @@ client.commands.load('./internalCommands')
 client.commands.load('./events/client')
 client.commands.load('./interactions')
 music.commands.load('./events/music')
-
-// Adding more sources to music service.
-music.player.extractors.register(YoutubeiExtractor, {})
-// music.player.extractors.register(DeezerExtractor, { decryptionKey: process.env.DZR_DECRYPTION_KEY })
 
 client.login()

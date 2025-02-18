@@ -94,14 +94,14 @@ module.exports = {
 
         $c[Trying to play once.]
         $try[
-            $playTrack[$voiceID[$guildID;$authorID];$get[query];$get[sourceType];YOUTUBE]
+            $playTrack[$voiceID[$guildID;$authorID];$get[query]]
             $let[succeed;true]
         ;$let[lastErrorReason;$env[e;message]];e]
 
         $c[Trying to play many times.]
         $while[$and[$get[currentConnectionRetry]<$get[maximumConnectionRetries];$get[succeed]==false];
             $try[
-                $playTrack[$voiceID[$guildID;$authorID];$get[query];$get[sourceType];YOUTUBE]
+                $playTrack[$voiceID[$guildID;$authorID];$get[query]]
                 $let[succeed;true]
             ;
                 $let[lastErrorReason;$env[error;message]]
@@ -113,14 +113,12 @@ module.exports = {
         $if[$get[succeed]==true;
             $interactionFollowUp[
                 $title[Occurences found]
-                $description[<:disk:1323748440425103411> → $if[$get[hadMusicNode]==true;Track added to the queue.;Playing the track...]$if[$get[sourceType]==youtube;\n${redPlatformWarning}]]
+                $description[<:disk:1323748440425103411> → $if[$get[hadMusicNode]==true;Track added to the queue.;Playing the track...]$if[$get[sourceType]==youtube;\n${redPlatformWarning}]$if[$get[currentConnectionRetry]>0;\nConnected after $bold[$get[currentConnectionRetry] retries].]]
                 $footer[$username[$clientID] Music]
                 $color[FFFFFF]
                 $timestamp
             ]
         ]
-
-        $logger[Info;SUCCEED?: $get[succeed]]
 
         $c[Send the error message if maximum retries reached and not success.]
         $if[$and[$get[currentConnectionRetry]==$get[maximumConnectionRetries];$get[succeed]==false];
