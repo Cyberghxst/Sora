@@ -96,7 +96,10 @@ module.exports = {
         $try[
             $playTrack[$voiceID[$guildID;$authorID];$get[query]]
             $let[succeed;true]
-        ;$let[lastErrorReason;$env[e;message]];e]
+        ;
+            $let[currentConnectionRetry;$sum[$get[currentConnectionRetry];1]]
+            $let[lastErrorReason;$env[e;message]]
+        ;e]
 
         $c[Trying to play many times.]
         $while[$and[$get[currentConnectionRetry]<$get[maximumConnectionRetries];$get[succeed]==false];
