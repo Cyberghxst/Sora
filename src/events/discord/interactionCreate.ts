@@ -16,7 +16,7 @@ export default new DiscordEventHandler({
                 // Execute each validator if any.
                 if (command.validate) {
                     for (const validator of command.validate) {
-                        const result = validator.call(this, interaction as ChatInputCommandInteraction<'cached'>)
+                        const result = validator(this, interaction as ChatInputCommandInteraction<'cached'>)
                         if (!result) return;
                     }
                 }
@@ -24,7 +24,13 @@ export default new DiscordEventHandler({
                 // Execute the command.
                 const result = await command.execute.call(this, interaction as ChatInputCommandInteraction<'cached'>)
                 if (result.isError()) {
-                    await interaction.reply({ content: result.value instanceof Error ? result.value.message : result.value ?? 'Something went wrong.' })
+                    await interaction[
+                        interaction.deferred ? 'followUp' : 'reply'
+                    ]({
+                        content: result.value instanceof Error 
+                            ? result.value.message 
+                            : result.value ?? 'Something went wrong.'
+                    })
                 }
             }
         }

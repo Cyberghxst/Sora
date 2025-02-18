@@ -13,26 +13,39 @@ export const data: SoraChatInputCommandData = {
         }
     ],
     async execute(interaction) {
-        if (!interaction.member.voice) {
+        if (!interaction.member.voice.channel) {
             return Output.error('You must be connected to a voice channel!')
         }
 
         const query = interaction.options.getString('query', true)
-        try {
-            const result = await this.player.play(interaction.member.voice.id, query)
-            const { track } = result
+        let connectionRetries = 10
+        let succeed = false
+        let currentTry = 0
+        let lastReason = 'No reason.'
 
-            await interaction.reply(`Playing ${track.cleanTitle} by **${track.author}**.`)
-        } catch (e: any) {
-            return Output.error(`Unable to play the track with reason:\n-# ${e.message}`)
+        await interaction.deferReply()
+
+        while (currentTry < connectionRetries && !succeed) {
+            try {
+                const result = await this.player.play(interaction.member.voice.channel, query)
+                await interaction.followUp({
+                    content: `Playing "${result.track.cleanTitle}" by **${result.track.author}**.\n-# Connection try: ${currentTry + 1}`
+                })
+                succeed = true
+            } catch (e: any) {
+                currentTry++
+                lastReason = e.message
+            }
         }
 
+        if (currentTry === connectionRetries) {
+            return Output.error(`Unable to play the track after ${connectionRetries} retries with reason:\n-# ${lastReason}`)
+        }
 
         return Output.success();
     },
     validate: [
-        function (interaction) {
-            return interaction.user.id === '590267498192961540'
-        }
+        (client, interaction) => interaction.user.id === '590267498192961540',
+        (client, interaction) => interaction.guild.id === '966131185120059424'
     ]
 }
